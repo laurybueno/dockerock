@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+  wordpress:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app
+      - ./config/apache.conf:/etc/apache2/sites-available/000-default.conf
+    environment:
+      DB_NAME: wordpress
+      DB_USER: wordpress
+      DB_PASSWORD: wordpress
+      DB_HOST: mariadb
+      WP_ENV: development
+      WP_HOME: http://localhost
+      WP_SITEURL: http://localhost
+    ports:
+      - '80:80'
+
+  mariadb:
+    image: mariadb:10.2
+    volumes:
+      - ./mariadb_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
